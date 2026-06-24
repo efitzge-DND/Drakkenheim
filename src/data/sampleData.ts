@@ -1,0 +1,138 @@
+// Seed data — the source of truth for campaign STRUCTURE.
+//
+// This file is committed to git and deployed with the app. It is merged
+// with whatever is stored in Supabase on load (see useSupabaseDb.ts):
+// new entries here get added to existing campaigns automatically, but
+// entries already in Supabase are never overwritten, so live edits made
+// through the app are safe across deploys.
+//
+// Replace the placeholder entries below with your own setting, NPCs,
+// locations, etc. Keep the `id` fields stable once you've deployed —
+// changing an id makes the merge treat it as a brand-new entry.
+
+import type { LoreDatabase } from './schema';
+
+export const initialLoreDatabase: LoreDatabase = {
+  version: '0.1.0',
+  campaign: {
+    name:        'Sample Campaign',
+    setting:     'A placeholder fantasy setting — replace with your own',
+    description: 'This is seed data. Edit src/data/sampleData.ts to describe your own campaign.',
+    dm_name:     'Your Name Here',
+  },
+
+  characters: [
+    {
+      id:                 'char-sample-1',
+      name:               'Sample Hero',
+      player_name:        'Player One',
+      class:              'Fighter',
+      race:               'Human',
+      level:              1,
+      background:         'Soldier',
+      description:        'A placeholder player character.',
+      portrait_emoji:     '🛡️',
+      inventory:          [],
+      faction_relations:  {},
+      known_fact_ids:     [],
+      session_notes:      [],
+      is_active:          true,
+      tags:               [],
+      created_at:         '2026-01-01',
+      updated_at:         '2026-01-01',
+    },
+  ],
+
+  npcs: [
+    {
+      id:           'npc-sample-1',
+      name:         'Sample Innkeeper',
+      aliases:      [],
+      description:  'Runs the local tavern. A good source of rumors.',
+      appearance:   'Middle-aged, weathered hands, an easy smile.',
+      personality:  'Friendly but guarded about local politics.',
+      motivations:  'Wants the town to stay peaceful and profitable.',
+      role:         'Innkeeper',
+      kind:         'character',
+      relation_to_characters: {},
+      secret_notes: 'Replace with DM-only secrets about this NPC.',
+      knowledge:    ['Local rumors', 'Recent strangers in town'],
+      visibility:   'public',
+      tags:         [],
+      created_at:   '2026-01-01',
+      updated_at:   '2026-01-01',
+    },
+  ],
+
+  locations: [
+    {
+      id:                     'loc-sample-1',
+      name:                   'Sample Town',
+      type:                   'Town',
+      description:            'A small town where the campaign begins.',
+      dm_notes:               'Replace with DM-only notes about this location.',
+      notable_npc_ids:        ['npc-sample-1'],
+      connected_location_ids: [],
+      faction_ids:            [],
+      lore_entries:           [],
+      visibility:             'public',
+      tags:                   [],
+      created_at:             '2026-01-01',
+      updated_at:             '2026-01-01',
+    },
+  ],
+
+  factions: [
+    {
+      id:                 'faction-sample-1',
+      name:               'Sample Guild',
+      symbol_description: 'A simple emblem — replace with your own.',
+      description:        'A placeholder faction the party may encounter.',
+      dm_notes:           'Replace with DM-only notes about this faction.',
+      goals:              'Maintain influence over local trade.',
+      methods:            'Negotiation, bribery, occasional intimidation.',
+      alignment:          'Lawful Neutral',
+      notable_member_ids: ['npc-sample-1'],
+      territory_ids:      [],
+      relations:          {},
+      visibility:         'public',
+      tags:               [],
+      created_at:         '2026-01-01',
+      updated_at:         '2026-01-01',
+    },
+  ],
+
+  world_facts: [
+    {
+      id:         'fact-sample-1',
+      title:      'Sample World Fact',
+      category:   'History',
+      content:    'A placeholder piece of world lore. Replace with your own setting details.',
+      visibility: 'public',
+      tags:       [],
+      created_at: '2026-01-01',
+      updated_at: '2026-01-01',
+    },
+  ],
+
+  adventures: [
+    {
+      id:                'adv-sample-1',
+      name:              'Session 1: The Beginning',
+      session_number:    1,
+      date_played:       '2026-01-01',
+      summary:           'Placeholder summary of the first session.',
+      dm_notes:          'Replace with DM-only notes about this session.',
+      participant_ids:   ['char-sample-1'],
+      locations_visited: ['loc-sample-1'],
+      npcs_encountered:  ['npc-sample-1'],
+      loot_awarded:      [],
+      hooks_created:      [],
+      tags:               [],
+      created_at:         '2026-01-01',
+      updated_at:         '2026-01-01',
+    },
+  ],
+
+  items: [],
+};
