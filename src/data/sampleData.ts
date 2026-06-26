@@ -183,23 +183,7 @@ export const initialLoreDatabase: LoreDatabase = {
     },
   ],
 
-  locations: [
-    {
-      id:                     'loc-sample-1',
-      name:                   'Sample Town',
-      type:                   'Town',
-      description:            'A small town where the campaign begins.',
-      dm_notes:               'Replace with DM-only notes about this location.',
-      notable_npc_ids:        ['npc-sample-1'],
-      connected_location_ids: [],
-      faction_ids:            [],
-      lore_entries:           [],
-      visibility:             'public',
-      tags:                   [],
-      created_at:             '2026-01-01',
-      updated_at:             '2026-01-01',
-    },
-  ],
+  locations: [],
 
   factions: [
     {
@@ -287,39 +271,28 @@ export const initialLoreDatabase: LoreDatabase = {
       created_at:         '2026-01-01',
       updated_at:         '2026-01-01',
     },
-  ],
-
-  world_facts: [
     {
-      id:         'fact-sample-1',
-      title:      'Sample World Fact',
-      category:   'History',
-      content:    'A placeholder piece of world lore. Replace with your own setting details.',
-      visibility: 'public',
-      tags:       [],
-      created_at: '2026-01-01',
-      updated_at: '2026-01-01',
-    },
-  ],
-
-  adventures: [
-    {
-      id:                'adv-sample-1',
-      name:              'Session 1: The Beginning',
-      session_number:    1,
-      date_played:       '2026-01-01',
-      summary:           'Placeholder summary of the first session.',
-      dm_notes:          'Replace with DM-only notes about this session.',
-      participant_ids:   ['char-sample-1'],
-      locations_visited: ['loc-sample-1'],
-      npcs_encountered:  ['npc-sample-1'],
-      loot_awarded:      [],
-      hooks_created:      [],
-      tags:               [],
+      id:                 'faction-ironhelm-dwarves',
+      name:               'The Ironhelm Dwarves',
+      symbol_description: 'An iron helm over a crossed pick and hammer.',
+      description:        'A clan of dwarven miners, smiths, and mercenaries drawn to Drakkenheim by the riches buried in its ruins. Practical and hardy, they are as interested in salvaging valuable materials and delirium as they are wary of the dangers beneath the city.',
+      dm_notes:           '',
+      goals:              'Profit from the ruins of Drakkenheim through mining, salvage, and trade while keeping their people safe.',
+      methods:            'Expert excavation, craftsmanship, mercenary contracts, and hard bargaining.',
+      alignment:          'Lawful Neutral',
+      notable_member_ids: [],
+      territory_ids:      [],
+      relations:          {},
+      visibility:         'public',
+      tags:               ['faction'],
       created_at:         '2026-01-01',
       updated_at:         '2026-01-01',
     },
   ],
+
+  world_facts: [],
+
+  adventures: [],
 
   items: [
     {
@@ -338,6 +311,7 @@ export const initialLoreDatabase: LoreDatabase = {
     },
   ],
 };
+
 
 
 
