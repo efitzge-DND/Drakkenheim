@@ -21,32 +21,52 @@ function App() {
       <h1>{db.campaign.name}</h1>
       <p>{db.campaign.description}</p>
 
+      <h2>Characters ({db.characters.length})</h2>
+      <ul>
+        {db.characters.map(c => (
+          <li key={c.id}>{c.portrait_emoji} <strong>{c.name}</strong> — Level {c.level} {c.race} {c.class} (played by {c.player_name}){c.description ? ` — ${c.description}` : ''}</li>
+        ))}
+      </ul>
+
       <h2>NPCs ({db.npcs.length})</h2>
       <ul>
-        {db.npcs.map(npc => <li key={npc.id}>{npc.name} — {npc.role}</li>)}
+        {db.npcs.map(npc => <li key={npc.id}><strong>{npc.name}</strong> — {npc.role}{npc.description ? ` — ${npc.description}` : ''}</li>)}
       </ul>
 
       <h2>Locations ({db.locations.length})</h2>
       <ul>
-        {db.locations.map(loc => <li key={loc.id}>{loc.name} ({loc.type})</li>)}
+        {db.locations.map(loc => <li key={loc.id}><strong>{loc.name}</strong> ({loc.type}){loc.description ? ` — ${loc.description}` : ''}</li>)}
       </ul>
 
       <h2>Factions ({db.factions.length})</h2>
       <ul>
-        {db.factions.map(f => <li key={f.id}>{f.name}</li>)}
+        {db.factions.map(f => (
+          <li key={f.id}><strong>{f.name}</strong> — {f.description}</li>
+        ))}
+      </ul>
+
+      <h2>Magic Items ({(db.items ?? []).length})</h2>
+      <ul>
+        {(db.items ?? []).map(item => (
+          <li key={item.id}>
+            <strong>{item.name}</strong> ({item.rarity}){item.description ? ` — ${item.description}` : ''}
+            {item.awarded_to_character_id ? ` [held by ${db.characters.find(c => c.id === item.awarded_to_character_id)?.name ?? item.awarded_to_character_id}]` : ''}
+          </li>
+        ))}
       </ul>
 
       <h2>World Facts ({db.world_facts.length})</h2>
       <ul>
-        {db.world_facts.map(wf => <li key={wf.id}>{wf.title}</li>)}
+        {db.world_facts.map(wf => <li key={wf.id}><strong>{wf.title}</strong> ({wf.category}) — {wf.content}</li>)}
       </ul>
 
       <h2>Adventures ({db.adventures.length})</h2>
       <ul>
-        {db.adventures.map(a => <li key={a.id}>Session {a.session_number}: {a.name}</li>)}
+        {db.adventures.map(a => <li key={a.id}><strong>Session {a.session_number}: {a.name}</strong>{a.summary ? ` — ${a.summary}` : ''}</li>)}
       </ul>
     </main>
   );
 }
 
 export default App
+
