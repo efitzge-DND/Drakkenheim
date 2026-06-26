@@ -334,9 +334,10 @@ export const initialLoreDatabase: LoreDatabase = {
       tags:                     ['rod', 'spellcaster', 'attunement'],
       claimed:                  true,
       visibility:               'public',
-      image_url:                '',
+      image_url:                'https://raw.githubusercontent.com/efitzge-DND/Drakkenheim/main/Rod%20of%20the%20Last%20Argument.png',
     },
   ],
 };
+
 
 
