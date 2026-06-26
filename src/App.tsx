@@ -232,7 +232,7 @@ function App() {
                   <img
                     src={item.image_url}
                     alt={item.name}
-                    style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.8rem', border: '1px solid #2e2318' }}
+                    style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', borderRadius: '4px', marginBottom: '0.8rem', border: '1px solid #2e2318', background: '#0e0c0a' }}
                   />
                 )}
                 <h3 style={styles.cardTitle}>{item.name}</h3>
@@ -293,4 +293,5 @@ function App() {
 }
 
 export default App;
+
 
