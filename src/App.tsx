@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import { useSupabaseDb } from './hooks/useSupabaseDb';
 
-const TABS = ['Characters', 'NPCs', 'Locations', 'Factions', 'Magic Items', 'Lore', 'Sessions'] as const;
-type Tab = typeof TABS[number];
+const TABS = [
+  { name: 'Characters', icon: '🛡️' },
+  { name: 'NPCs', icon: '🎭' },
+  { name: 'Locations', icon: '🗺️' },
+  { name: 'Factions', icon: '⚜️' },
+  { name: 'Magic Items', icon: '✨' },
+  { name: 'Lore', icon: '📖' },
+  { name: 'Sessions', icon: '📜' },
+] as const;
+type Tab = typeof TABS[number]['name'];
 
 const styles = {
   root: {
@@ -10,51 +18,75 @@ const styles = {
     background: '#0e0c0a',
     color: '#c9b99a',
     fontFamily: "'Georgia', 'Times New Roman', serif",
+    display: 'flex',
+    alignItems: 'stretch' as const,
   },
-  header: {
-    background: 'linear-gradient(180deg, #1a0a2e 0%, #0e0c0a 100%)',
-    borderBottom: '2px solid #4a1d6e',
-    padding: '2rem 1rem 1rem',
-    textAlign: 'center' as const,
+  sidebar: {
+    width: '240px',
+    flexShrink: 0,
+    background: 'linear-gradient(180deg, #1a0a2e 0%, #120a1f 100%)',
+    borderRight: '2px solid #4a1d6e',
+    padding: '1.6rem 0.9rem',
+    position: 'sticky' as const,
+    top: 0,
+    alignSelf: 'flex-start' as const,
+    height: '100vh',
+    boxSizing: 'border-box' as const,
+    overflowY: 'auto' as const,
+  },
+  brand: {
+    padding: '0 0.6rem 1.4rem',
+    borderBottom: '1px solid #2e2318',
+    marginBottom: '1.2rem',
   },
   title: {
-    fontSize: '2.4rem',
+    fontSize: '1.5rem',
     color: '#c084fc',
-    letterSpacing: '0.08em',
-    textShadow: '0 0 24px #7c3aed88',
+    letterSpacing: '0.04em',
+    textShadow: '0 0 18px #7c3aed88',
     margin: 0,
     fontWeight: 'bold',
+    lineHeight: 1.2,
   },
   subtitle: {
     color: '#7c6a50',
-    fontSize: '0.95rem',
-    marginTop: '0.4rem',
+    fontSize: '0.78rem',
+    marginTop: '0.5rem',
     fontStyle: 'italic',
+    lineHeight: 1.4,
   },
-  tabBar: {
+  navItem: (active: boolean) => ({
     display: 'flex',
-    flexWrap: 'wrap' as const,
-    gap: '2px',
-    background: '#1a0a2e',
-    borderBottom: '2px solid #4a1d6e',
-    padding: '0 1rem',
-  },
-  tab: (active: boolean) => ({
-    padding: '0.6rem 1.1rem',
+    alignItems: 'center',
+    gap: '0.7rem',
+    width: '100%',
+    textAlign: 'left' as const,
+    padding: '0.65rem 0.8rem',
+    marginBottom: '0.25rem',
     cursor: 'pointer',
     background: active ? '#2d1b4e' : 'transparent',
-    color: active ? '#c084fc' : '#7c6a50',
+    color: active ? '#c084fc' : '#9a8a6c',
     border: 'none',
-    borderBottom: active ? '2px solid #c084fc' : '2px solid transparent',
+    borderLeft: active ? '3px solid #c084fc' : '3px solid transparent',
+    borderRadius: '4px',
     fontFamily: 'inherit',
-    fontSize: '0.9rem',
-    letterSpacing: '0.04em',
+    fontSize: '0.95rem',
+    letterSpacing: '0.02em',
     transition: 'color 0.15s, background 0.15s',
   }),
+  navIcon: {
+    fontSize: '1.05rem',
+    width: '1.4rem',
+    textAlign: 'center' as const,
+  },
+  main: {
+    flex: 1,
+    minWidth: 0,
+    padding: '2.4rem 2rem',
+  },
   content: {
-    maxWidth: 860,
+    maxWidth: 820,
     margin: '0 auto',
-    padding: '2rem 1rem',
   },
   card: {
     background: '#161310',
@@ -149,149 +181,149 @@ function App() {
 
   return (
     <div style={styles.root}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>{db.campaign.name}</h1>
-        <p style={styles.subtitle}>{db.campaign.description}</p>
-      </header>
-
-      <nav style={styles.tabBar}>
+      <nav style={styles.sidebar}>
+        <div style={styles.brand}>
+          <h1 style={styles.title}>{db.campaign.name}</h1>
+          <p style={styles.subtitle}>{db.campaign.description}</p>
+        </div>
         {TABS.map(tab => (
-          <button key={tab} style={styles.tab(activeTab === tab)} onClick={() => setActiveTab(tab)}>
-            {tab}
+          <button key={tab.name} style={styles.navItem(activeTab === tab.name)} onClick={() => setActiveTab(tab.name)}>
+            <span style={styles.navIcon}>{tab.icon}</span>
+            {tab.name}
           </button>
         ))}
       </nav>
 
-      <div style={styles.content}>
+      <main style={styles.main}>
+        <div style={styles.content}>
 
-        {activeTab === 'Characters' && (
-          <>
-            <p style={styles.sectionHeader}>The Party</p>
-            {db.characters.length === 0 ? <EmptyState tab="characters" /> : db.characters.map(c => (
-              <div key={c.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>{c.portrait_emoji} {c.name}</h3>
-                <p style={styles.cardMeta}>Level {c.level} {c.race} {c.class}{c.subclass ? ` (${c.subclass})` : ''} · Played by {c.player_name}</p>
-                {c.background && <p style={styles.cardMeta}>{c.background}</p>}
-                {c.description && <p style={styles.cardBody}>{c.description}</p>}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'Characters' && (
+            <>
+              <p style={styles.sectionHeader}>The Party</p>
+              {db.characters.length === 0 ? <EmptyState tab="characters" /> : db.characters.map(c => (
+                <div key={c.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>{c.portrait_emoji} {c.name}</h3>
+                  <p style={styles.cardMeta}>Level {c.level} {c.race} {c.class}{c.subclass ? ` (${c.subclass})` : ''} · Played by {c.player_name}</p>
+                  {c.background && <p style={styles.cardMeta}>{c.background}</p>}
+                  {c.description && <p style={styles.cardBody}>{c.description}</p>}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'NPCs' && (
-          <>
-            <p style={styles.sectionHeader}>Notable People</p>
-            {db.npcs.length === 0 ? <EmptyState tab="NPCs" /> : db.npcs.map(npc => (
-              <div key={npc.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>{npc.name}</h3>
-                <p style={styles.cardMeta}>{npc.role}{npc.status ? ` · ${npc.status}` : ''}</p>
-                {npc.appearance && <p style={styles.cardMeta}>{npc.appearance}</p>}
-                {npc.description && <p style={styles.cardBody}>{npc.description}</p>}
-                {npc.personality && <p style={styles.cardBody}><em>"{npc.personality}"</em></p>}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'NPCs' && (
+            <>
+              <p style={styles.sectionHeader}>Notable People</p>
+              {db.npcs.length === 0 ? <EmptyState tab="NPCs" /> : db.npcs.map(npc => (
+                <div key={npc.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>{npc.name}</h3>
+                  <p style={styles.cardMeta}>{npc.role}{npc.status ? ` · ${npc.status}` : ''}</p>
+                  {npc.appearance && <p style={styles.cardMeta}>{npc.appearance}</p>}
+                  {npc.description && <p style={styles.cardBody}>{npc.description}</p>}
+                  {npc.personality && <p style={styles.cardBody}><em>"{npc.personality}"</em></p>}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'Locations' && (
-          <>
-            <p style={styles.sectionHeader}>Known Places</p>
-            {db.locations.length === 0 ? <EmptyState tab="locations" /> : db.locations.map(loc => (
-              <div key={loc.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>{loc.name}</h3>
-                <p style={styles.cardMeta}>{loc.type}</p>
-                {loc.description && <p style={styles.cardBody}>{loc.description}</p>}
-                {loc.sensory?.sight && <p style={styles.cardBody}><em>👁 {loc.sensory.sight}</em></p>}
-                {loc.sensory?.sound && <p style={styles.cardBody}><em>👂 {loc.sensory.sound}</em></p>}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'Locations' && (
+            <>
+              <p style={styles.sectionHeader}>Known Places</p>
+              {db.locations.length === 0 ? <EmptyState tab="locations" /> : db.locations.map(loc => (
+                <div key={loc.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>{loc.name}</h3>
+                  <p style={styles.cardMeta}>{loc.type}</p>
+                  {loc.description && <p style={styles.cardBody}>{loc.description}</p>}
+                  {loc.sensory?.sight && <p style={styles.cardBody}><em>👁 {loc.sensory.sight}</em></p>}
+                  {loc.sensory?.sound && <p style={styles.cardBody}><em>👂 {loc.sensory.sound}</em></p>}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'Factions' && (
-          <>
-            <p style={styles.sectionHeader}>Powers at Play</p>
-            {db.factions.length === 0 ? <EmptyState tab="factions" /> : db.factions.map(f => (
-              <div key={f.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>{f.name}</h3>
-                <p style={styles.cardMeta}>{f.alignment} · {f.symbol_description}</p>
-                {f.description && <p style={styles.cardBody}>{f.description}</p>}
-                {f.goals && <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Goals:</strong> {f.goals}</p>}
-                {f.methods && <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Methods:</strong> {f.methods}</p>}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'Factions' && (
+            <>
+              <p style={styles.sectionHeader}>Powers at Play</p>
+              {db.factions.length === 0 ? <EmptyState tab="factions" /> : db.factions.map(f => (
+                <div key={f.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>{f.name}</h3>
+                  <p style={styles.cardMeta}>{f.alignment} · {f.symbol_description}</p>
+                  {f.description && <p style={styles.cardBody}>{f.description}</p>}
+                  {f.goals && <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Goals:</strong> {f.goals}</p>}
+                  {f.methods && <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Methods:</strong> {f.methods}</p>}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'Magic Items' && (
-          <>
-            <p style={styles.sectionHeader}>Artifacts & Relics</p>
-            {items.length === 0 ? <EmptyState tab="magic items" /> : items.map(item => (
-              <div key={item.id} style={styles.card}>
-                {item.image_url && (
-                  <img
-                    src={item.image_url}
-                    alt={item.name}
-                    style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', borderRadius: '4px', marginBottom: '0.8rem', border: '1px solid #2e2318', background: '#0e0c0a' }}
-                  />
-                )}
-                <h3 style={styles.cardTitle}>{item.name}</h3>
-                <p style={styles.cardMeta}>
-                  <RarityBadge rarity={item.rarity} />
-                  {item.category && <span style={styles.tag}>{item.category}</span>}
-                  {item.gp_value && <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}> · {item.gp_value.toLocaleString()} gp</span>}
-                  {item.awarded_to_character_id && (
-                    <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}>
-                      {' '}· held by {db.characters.find(c => c.id === item.awarded_to_character_id)?.name ?? item.awarded_to_character_id}
-                    </span>
+          {activeTab === 'Magic Items' && (
+            <>
+              <p style={styles.sectionHeader}>Artifacts & Relics</p>
+              {items.length === 0 ? <EmptyState tab="magic items" /> : items.map(item => (
+                <div key={item.id} style={styles.card}>
+                  {item.image_url && (
+                    <img
+                      src={item.image_url}
+                      alt={item.name}
+                      style={{ display: 'block', width: '100%', height: 'auto', objectFit: 'contain', borderRadius: '4px', marginBottom: '0.8rem', border: '1px solid #2e2318', background: '#0e0c0a' }}
+                    />
                   )}
-                </p>
-                {item.description && (
-                  <p style={styles.cardBody}>
-                    {item.description.split('\n').map((line, i) => (
-                      <span key={i}>{line}{i < item.description.split('\n').length - 1 && <br />}</span>
-                    ))}
+                  <h3 style={styles.cardTitle}>{item.name}</h3>
+                  <p style={styles.cardMeta}>
+                    <RarityBadge rarity={item.rarity} />
+                    {item.category && <span style={styles.tag}>{item.category}</span>}
+                    {item.gp_value && <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}> · {item.gp_value.toLocaleString()} gp</span>}
+                    {item.awarded_to_character_id && (
+                      <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}>
+                        {' '}· held by {db.characters.find(c => c.id === item.awarded_to_character_id)?.name ?? item.awarded_to_character_id}
+                      </span>
+                    )}
                   </p>
-                )}
-              </div>
-            ))}
-          </>
-        )}
+                  {item.description && (
+                    <p style={styles.cardBody}>
+                      {item.description.split('\n').map((line, i) => (
+                        <span key={i}>{line}{i < item.description.split('\n').length - 1 && <br />}</span>
+                      ))}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'Lore' && (
-          <>
-            <p style={styles.sectionHeader}>World Knowledge</p>
-            {db.world_facts.length === 0 ? <EmptyState tab="lore" /> : db.world_facts.map(wf => (
-              <div key={wf.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>{wf.title}</h3>
-                <p style={styles.cardMeta}>{wf.category}</p>
-                {wf.content && <p style={styles.cardBody}>{wf.content}</p>}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'Lore' && (
+            <>
+              <p style={styles.sectionHeader}>World Knowledge</p>
+              {db.world_facts.length === 0 ? <EmptyState tab="lore" /> : db.world_facts.map(wf => (
+                <div key={wf.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>{wf.title}</h3>
+                  <p style={styles.cardMeta}>{wf.category}</p>
+                  {wf.content && <p style={styles.cardBody}>{wf.content}</p>}
+                </div>
+              ))}
+            </>
+          )}
 
-        {activeTab === 'Sessions' && (
-          <>
-            <p style={styles.sectionHeader}>Chronicle of Events</p>
-            {db.adventures.length === 0 ? <EmptyState tab="sessions" /> : [...db.adventures].sort((a, b) => b.session_number - a.session_number).map(a => (
-              <div key={a.id} style={styles.card}>
-                <h3 style={styles.cardTitle}>Session {a.session_number}: {a.name}</h3>
-                <p style={styles.cardMeta}>{a.date_played}</p>
-                {a.summary && <p style={styles.cardBody}>{a.summary}</p>}
-                {a.hooks_created?.length > 0 && (
-                  <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Hooks:</strong> {a.hooks_created.join(', ')}</p>
-                )}
-              </div>
-            ))}
-          </>
-        )}
+          {activeTab === 'Sessions' && (
+            <>
+              <p style={styles.sectionHeader}>Chronicle of Events</p>
+              {db.adventures.length === 0 ? <EmptyState tab="sessions" /> : [...db.adventures].sort((a, b) => b.session_number - a.session_number).map(a => (
+                <div key={a.id} style={styles.card}>
+                  <h3 style={styles.cardTitle}>Session {a.session_number}: {a.name}</h3>
+                  <p style={styles.cardMeta}>{a.date_played}</p>
+                  {a.summary && <p style={styles.cardBody}>{a.summary}</p>}
+                  {a.hooks_created?.length > 0 && (
+                    <p style={styles.cardBody}><strong style={{ color: '#7c6a50' }}>Hooks:</strong> {a.hooks_created.join(', ')}</p>
+                  )}
+                </div>
+              ))}
+            </>
+          )}
 
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
 
 export default App;
-
-
