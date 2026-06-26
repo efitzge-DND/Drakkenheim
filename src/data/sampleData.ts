@@ -321,7 +321,22 @@ export const initialLoreDatabase: LoreDatabase = {
     },
   ],
 
-  items: [],
+  items: [
+    {
+      id:                       'item-rod-of-the-last-argument',
+      name:                     'Rod of the Last Argument',
+      description:              'A polished steel rod capped with silver rings. It once belonged to a magistrate who reportedly won every courtroom debate until his disappearance during the Civil War.\n\n+1 bonus to spell attack rolls and spell save DC.\n\nForceful Rebuttal (reaction): When a creature succeeds on a saving throw against one of your spells, deal 1d8 force damage to that creature. Usable a number of times equal to your proficiency bonus per long rest.',
+      quantity:                 1,
+      rarity:                   'Rare',
+      category:                 'magical',
+      gp_value:                 1900,
+      dm_notes:                 '',
+      tags:                     ['rod', 'spellcaster', 'attunement'],
+      claimed:                  true,
+      visibility:               'public',
+      image_url:                '',
+    },
+  ],
 };
 
 
