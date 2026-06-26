@@ -21,6 +21,7 @@ export interface Item {
   awarded_to_character_id?: string;   // undefined = party pool / unclaimed
   claimed:                  boolean;
   visibility?:              Visibility;
+  image_url?:               string;
 }
 
 // ─── Stat Block (D&D 5e) ─────────────────────────────────────────────────────
@@ -279,3 +280,4 @@ export interface LoreDatabase {
   adventures:           Adventure[];
   items?:               Item[];      // global loot registry, claimable by characters
 }
+
