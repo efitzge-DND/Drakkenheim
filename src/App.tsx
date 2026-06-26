@@ -228,17 +228,31 @@ function App() {
             <p style={styles.sectionHeader}>Artifacts & Relics</p>
             {items.length === 0 ? <EmptyState tab="magic items" /> : items.map(item => (
               <div key={item.id} style={styles.card}>
+                {item.image_url && (
+                  <img
+                    src={item.image_url}
+                    alt={item.name}
+                    style={{ width: '100%', maxHeight: '260px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.8rem', border: '1px solid #2e2318' }}
+                  />
+                )}
                 <h3 style={styles.cardTitle}>{item.name}</h3>
                 <p style={styles.cardMeta}>
                   <RarityBadge rarity={item.rarity} />
                   {item.category && <span style={styles.tag}>{item.category}</span>}
+                  {item.gp_value && <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}> · {item.gp_value.toLocaleString()} gp</span>}
                   {item.awarded_to_character_id && (
                     <span style={{ color: '#7c6a50', fontSize: '0.82rem' }}>
-                      · held by {db.characters.find(c => c.id === item.awarded_to_character_id)?.name ?? item.awarded_to_character_id}
+                      {' '}· held by {db.characters.find(c => c.id === item.awarded_to_character_id)?.name ?? item.awarded_to_character_id}
                     </span>
                   )}
                 </p>
-                {item.description && <p style={styles.cardBody}>{item.description}</p>}
+                {item.description && (
+                  <p style={styles.cardBody}>
+                    {item.description.split('\n').map((line, i) => (
+                      <span key={i}>{line}{i < item.description.split('\n').length - 1 && <br />}</span>
+                    ))}
+                  </p>
+                )}
               </div>
             ))}
           </>
@@ -279,3 +293,4 @@ function App() {
 }
 
 export default App;
+
